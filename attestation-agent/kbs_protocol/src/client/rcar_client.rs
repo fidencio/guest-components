@@ -12,7 +12,7 @@ use log::{debug, warn};
 use resource_uri::ResourceUri;
 use serde::Deserialize;
 use serde_json::json;
-use sha2::{Digest, Sha384};
+use sha2::{Digest, Sha512};
 
 use crate::{
     api::KbsClientCapabilities,
@@ -180,7 +180,7 @@ impl KbsClient<Box<dyn EvidenceProvider>> {
     }
 
     async fn generate_evidence(&self, runtime_data: String) -> Result<String> {
-        let mut hasher = Sha384::new();
+        let mut hasher = Sha512::new();
         hasher.update(runtime_data);
 
         let ehd = hasher.finalize().to_vec();
