@@ -1,0 +1,35 @@
+[source.crates-io]
+replace-with = "vendored-sources"
+
+[source."git+https://github.com/intel/SGXDataCenterAttestationPrimitives?tag=DCAP_1.21"]
+git = "https://github.com/intel/SGXDataCenterAttestationPrimitives"
+tag = "DCAP_1.21"
+replace-with = "vendored-sources"
+
+[source."git+https://github.com/intel/ehsm?rev=3454cac66b968a593c3edc43410c0b52416bbd3e"]
+git = "https://github.com/intel/ehsm"
+rev = "3454cac66b968a593c3edc43410c0b52416bbd3e"
+replace-with = "vendored-sources"
+
+[source."git+https://github.com/mdaffin/loopdev?rev=c9f91e8f0326ce8a3364ac911e81eb32328a5f27"]
+git = "https://github.com/mdaffin/loopdev"
+rev = "c9f91e8f0326ce8a3364ac911e81eb32328a5f27"
+replace-with = "vendored-sources"
+
+[source."git+https://github.com/occlum/occlum?tag=v0.29.7"]
+git = "https://github.com/occlum/occlum"
+tag = "v0.29.7"
+replace-with = "vendored-sources"
+
+[source."git+https://github.com/openanolis/csv-rs?rev=b74aa8c"]
+git = "https://github.com/openanolis/csv-rs"
+rev = "b74aa8c"
+replace-with = "vendored-sources"
+
+[source."git+https://github.com/sigstore/sigstore-rs.git?rev=1b6ccf0f64d173350ec5515bd69ab48a26a9c0a3"]
+git = "https://github.com/sigstore/sigstore-rs.git"
+rev = "1b6ccf0f64d173350ec5515bd69ab48a26a9c0a3"
+replace-with = "vendored-sources"
+
+[source.vendored-sources]
+directory = "vendor"
