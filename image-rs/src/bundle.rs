@@ -22,6 +22,7 @@ const ANNOTATION_AUTHOR: &str = "org.opencontainers.image.author";
 const ANNOTATION_CREATED: &str = "org.opencontainers.image.created";
 const ANNOTATION_STOP_SIGNAL: &str = "org.opencontainers.image.stopSignal";
 const ANNOTATION_EXPOSED_PORTS: &str = "org.opencontainers.image.exposedPorts";
+const ANNOTATION_USER: &str = "org.opencontainers.image.user";
 
 /// Convert an `application/vnd.oci.image.config.v1+json` object into an OCI runtime configuration
 /// blob and write to `config.json`.
@@ -109,8 +110,16 @@ pub fn create_runtime_config(
         // A compliant configuration converter SHOULD parse all of these fields and set the
         // corresponding fields in the generated runtime configuration:
         // - User
-        // TODO: parse image config user info and extract uid from rootfs passwd file
+        // Store the original User string as an annotation so the container runtime (e.g., kata-agent)
+        // can resolve named users from /etc/passwd after the image is pulled and decrypted.
+        // This is particularly important for confidential containers where the host cannot
+        // access encrypted image layers to resolve users during policy generation.
         // github issue: https://github.com/confidential-containers/image-rs/issues/8
+        if let Some(user) = config.user() {
+            if !user.is_empty() {
+                annotations.insert(ANNOTATION_USER.to_string(), user.to_string());
+            }
+        }
 
         // Optional Fields:
         //
