@@ -25,6 +25,22 @@ Confidential Data Hub.
 [coco-keyprovider](attestation-agent/coco_keyprovider/)
 CoCo Keyprovider. Used to encrypt the container images.
 
+## SBOMs
+
+Every release has an [SPDX 2.3](https://spdx.dev/) SBOM attached for each
+shipped component (`attestation-agent`, `confidential-data-hub`,
+`api-server-rest` and `coco_keyprovider`), named
+`<component>-<tag>.spdx.json`. They are generated from the tagged commit and its
+committed `Cargo.lock` by the `Release SBOMs` workflow, and are attested so they
+can be verified with:
+
+```bash
+gh attestation verify <file> --repo confidential-containers/guest-components
+```
+
+SBOMs resolve dependencies for all features, so they list a superset of what a
+specific `TEE_PLATFORM` build links in.
+
 ## Tools
 
 [secret-cli](confidential-data-hub/docs/SEALED_SECRET.md)
