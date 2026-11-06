@@ -68,8 +68,18 @@ ifneq ($(RUSTFLAGS_ARGS),)
     RUST_FLAGS := RUSTFLAGS="$(RUSTFLAGS_ARGS)"
 endif
 
+# Set AUDITABLE=true to build with cargo-auditable, which embeds the exact
+# dependency list in the binary so SBOMs/scanners can be generated from it.
+# Requires `cargo install cargo-auditable`.
+AUDITABLE ?=
+ifeq ($(AUDITABLE),true)
+  CARGO_BUILD := cargo auditable build
+else
+  CARGO_BUILD := cargo build
+endif
+
 build:
-	$(RUST_FLAGS) cargo build $(release) $(LIBC_FLAG)
+	$(RUST_FLAGS) $(CARGO_BUILD) $(release) $(LIBC_FLAG)
 
 TARGET := $(TARGET_DIR)/$(BIN_NAME)
 

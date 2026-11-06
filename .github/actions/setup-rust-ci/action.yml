@@ -51,6 +51,10 @@ inputs:
     required: false
     # Default on: workspace crates link system OpenSSL (no longer vendored).
     default: "true"
+  install-auditable:
+    description: Install cargo-auditable (use with AUDITABLE=true in make builds)
+    required: false
+    default: "false"
   install-nvat:
     description: Build and install NVIDIA Attestation SDK
     required: false
@@ -127,6 +131,11 @@ runs:
       if: inputs.install-openssl == 'true'
       shell: bash
       run: sudo apt-get install -y --no-install-recommends libssl-dev pkg-config
+
+    - name: Install cargo-auditable
+      if: inputs.install-auditable == 'true'
+      shell: bash
+      run: cargo install --locked cargo-auditable --version 0.7.7
 
     - name: Install NVIDIA Attestation SDK
       if: inputs.install-nvat == 'true'
