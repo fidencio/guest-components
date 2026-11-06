@@ -28,18 +28,24 @@ CoCo Keyprovider. Used to encrypt the container images.
 ## SBOMs
 
 Release binaries (`attestation-agent`, `confidential-data-hub`, `api-server-rest`,
-the `secret` CLI) and the `coco-keyprovider` image are built with
+the `secret` CLI), the `coco-keyprovider` image and the binaries shipped in the
+`coco-extension` images are built with
 [cargo-auditable](https://github.com/rust-secure-code/cargo-auditable), which
 embeds the exact list of crates linked into each binary. Because it reflects the
-chosen features and target, it lists only what is really in the binary, and it is
-available for any published binary (including those pulled by commit hash).
+chosen features and target, it lists only what is really in the binary, it
+survives `strip`, and it is available for any published binary (including those
+pulled by commit hash).
 
 Extract it from a binary with, for example:
 
 ```bash
-cargo audit bin <binary>             # vulnerability scan
-syft <binary> -o spdx-json           # generate an SPDX SBOM
+cargo audit bin <binary>                                # vulnerability scan
+syft --select-catalogers rust <binary> -o spdx-json     # generate an SPDX SBOM
 ```
+
+Limiting syft to the `rust` catalogers keeps the document to the embedded
+dependency list, instead of also running the generic ELF and binary
+classifiers over the file.
 
 To build locally with it: `cargo install cargo-auditable`, then
 `make build AUDITABLE=true`.
