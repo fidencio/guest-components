@@ -13,7 +13,8 @@ RUN apt-get update && apt-get install -y \
 	protobuf-compiler
 WORKDIR /build
 COPY . .
-RUN cargo build --release -p coco_keyprovider
+RUN cargo install --locked cargo-auditable --version 0.7.7
+RUN cargo auditable build --release -p coco_keyprovider
 RUN mv target/release/coco_keyprovider .
 
 FROM golang:1.21.6-bookworm as skopeo

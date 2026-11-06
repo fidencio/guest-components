@@ -25,6 +25,25 @@ Confidential Data Hub.
 [coco-keyprovider](attestation-agent/coco_keyprovider/)
 CoCo Keyprovider. Used to encrypt the container images.
 
+## SBOMs
+
+Release binaries (`attestation-agent`, `confidential-data-hub`, `api-server-rest`,
+the `secret` CLI) and the `coco-keyprovider` image are built with
+[cargo-auditable](https://github.com/rust-secure-code/cargo-auditable), which
+embeds the exact list of crates linked into each binary. Because it reflects the
+chosen features and target, it lists only what is really in the binary, and it is
+available for any published binary (including those pulled by commit hash).
+
+Extract it from a binary with, for example:
+
+```bash
+cargo audit bin <binary>             # vulnerability scan
+syft <binary> -o spdx-json           # generate an SPDX SBOM
+```
+
+To build locally with it: `cargo install cargo-auditable`, then
+`make build AUDITABLE=true`.
+
 ## Tools
 
 [secret-cli](confidential-data-hub/docs/SEALED_SECRET.md)

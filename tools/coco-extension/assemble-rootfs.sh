@@ -77,7 +77,10 @@ build_dir="${repo_root_dir}/target/${rust_arch}-unknown-linux-${LIBC}/release"
 build_guest_components() {
 	info "Building guest components (ARCH=${ARCH} LIBC=${LIBC} ATTESTER=${ATTESTER})"
 
+	# AUDITABLE=true embeds the dependency list in each binary (cargo-auditable,
+	# installed in Dockerfile.builder); it survives strip.
 	make -C "${repo_root_dir}" build \
+		AUDITABLE=true \
 		TEE_PLATFORM="${TEE_PLATFORM}" \
 		ARCH="${ARCH}" \
 		LIBC="${LIBC}" \
@@ -145,6 +148,7 @@ build_nvidia_attestation_agent() {
 
 	NVAT_USE_SYSTEM_LIB=1 \
 		make -C "${repo_root_dir}/attestation-agent" \
+		AUDITABLE=true \
 		ttrpc=true \
 		ARCH="${ARCH}" \
 		LIBC="${LIBC}" \
@@ -178,6 +182,7 @@ install_guest_components() {
 	info "Installing guest components into ${ROOTFS_DIR}"
 
 	make -C "${repo_root_dir}" install \
+		AUDITABLE=true \
 		TEE_PLATFORM="${TEE_PLATFORM}" \
 		ARCH="${ARCH}" \
 		LIBC="${LIBC}" \

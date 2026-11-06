@@ -47,6 +47,7 @@ jobs:
     env:
       TEE_PLATFORM: ${{ matrix.platform.tee }}
       LIBC: ${{ matrix.platform.libc }}
+      AUDITABLE: "true" # embed dependency info in binaries (cargo-auditable)
       REGISTRY: ghcr.io
       IMAGE_NAME: ${{ github.repository }}
       RUST_TARGET: ${{ matrix.platform.arch }}-unknown-linux-${{ matrix.platform.libc }}
@@ -65,6 +66,7 @@ jobs:
       - uses: $/.github/actions/setup-rust-ci
         with:
           target: ${{ env.RUST_TARGET }}
+          install-auditable: "true"
           install-tpm: ${{ ( matrix.platform.tee == 'az-cvm-vtpm' ||
                              matrix.platform.tee == 'all' ) && 'true' || 'false' }}
           install-nvat: ${{ matrix.platform.tee == 'all' && 'true' || 'false' }}
@@ -135,6 +137,7 @@ jobs:
     runs-on: ${{ matrix.platform.runner }}
     env:
       LIBC: ${{ matrix.platform.libc }}
+      AUDITABLE: "true" # embed dependency info in binaries (cargo-auditable)
       REGISTRY: ghcr.io
       IMAGE_NAME: ${{ github.repository }}
       RUST_TARGET: ${{ matrix.platform.arch }}-unknown-linux-${{ matrix.platform.libc }}
@@ -151,6 +154,7 @@ jobs:
       - uses: $/.github/actions/setup-rust-ci
         with:
           target: ${{ env.RUST_TARGET }}
+          install-auditable: "true"
           install-dmverity: "true"
           install-build-deps: ${{ matrix.platform.arch == 'powerpc64le' && 'true' || 'false' }}
 
@@ -264,6 +268,7 @@ jobs:
           cache: "false"
           install-musl: ${{ matrix.platform.libc == 'musl' && 'true' || 'false' }}
           install-build-deps: "true"
+          install-auditable: "true"
 
       - name: Log in to the Container registry
         if: env.IS_PUBLISH == 'true'
@@ -279,7 +284,7 @@ jobs:
 
       - name: Build secret CLI
         run: |
-          cargo build \
+          cargo auditable build \
             -p confidential-data-hub \
             --bin secret \
             --release \

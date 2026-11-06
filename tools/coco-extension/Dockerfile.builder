@@ -57,6 +57,10 @@ RUN apt-get update && \
 		"https://github.com/opencontainers/umoci/releases/download/${UMOCI_VERSION}/umoci.linux.${TARGETARCH}" && \
 	chmod +x /usr/local/bin/umoci
 
+# cargo-auditable embeds the dependency list in the guest component binaries
+# (see AUDITABLE=true in assemble-rootfs.sh).
+RUN cargo install --locked cargo-auditable --version 0.7.7
+
 # NVAT_VERSION: libnvat/libnvat-dev version; keep in sync with install-nvat-sdk/action.yml.
 ARG NVAT_VERSION
 RUN if [ "$(uname -m)" = "x86_64" ] && [ -n "${NVAT_VERSION}" ]; then \
